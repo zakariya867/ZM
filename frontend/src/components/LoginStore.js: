@@ -1,0 +1,28 @@
+import React, { useState } from 'react';
+import { loginStore } from '../services/api';
+
+const LoginStore = () => {
+  const [storeName, setStoreName] = useState('');
+  const [password, setPassword] = useState('');
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    try {
+      const response = await loginStore({ store_name: storeName, password });
+      alert(response.data.message);
+    } catch (error) {
+      alert('Login failed');
+    }
+  };
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <h2>Login Store</h2>
+      <input type="text" placeholder="Store Name" value={storeName} onChange={(e) => setStoreName(e.target.value)} required />
+      <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} required />
+      <button type="submit">Login</button>
+    </form>
+  );
+};
+
+export default LoginStore;
