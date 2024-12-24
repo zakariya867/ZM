@@ -1,0 +1,35 @@
+import React from 'react';
+import { BrowserRouter as Router, Route, Switch, Link } from 'react-router-dom';
+import RegisterUser from './RegisterUser';
+import RegisterStore from './RegisterStore';
+import LoginUser from './LoginUser';
+import LoginStore from './LoginStore';
+import TransactionForm from './TransactionForm';
+import Credits from './Credits';
+
+const Dashboard = () => {
+  return (
+    <Router>
+      <nav>
+        <ul>
+          <li><Link to="/register-user">Register User</Link></li>
+          <li><Link to="/register-store">Register Store</Link></li>
+          <li><Link to="/login-user">Login User</Link></li>
+          <li><Link to="/login-store">Login Store</Link></li>
+          <li><Link to="/transaction">Record Transaction</Link></li>
+          <li><Link to="/credits">View Credits</Link></li>
+        </ul>
+      </nav>
+      <Switch>
+        <Route path="/register-user" component={RegisterUser} />
+        <Route path="/register-store" component={RegisterStore} />
+        <Route path="/login-user" component={LoginUser} />
+        <Route path="/login-store" component={LoginStore} />
+        <Route path="/transaction" component={TransactionForm} />
+        <Route path="/credits" component={Credits} />
+      </Switch>
+    </Router>
+  );
+};
+
+export default Dashboard;
