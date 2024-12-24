@@ -1,0 +1,5 @@
+mkdir change_management_app
+cd change_management_app
+python3 -m venv venv
+source venv/bin/activate
+pip install Flask Flask-SQLAlchemy Flask-Migrate Flask-Bcrypt
