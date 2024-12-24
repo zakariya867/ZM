@@ -32,6 +32,11 @@ class Transaction(db.Model):
     remaining_change = db.Column(db.Float, nullable=False)
     date = db.Column(db.DateTime, default=datetime.utcnow)
 
+if __name__ == '__main__':
+    app.run(debug=True)
+flask db init
+flask db migrate -m "Initial migration"
+flask db upgrade
 @app.route('/register/user', methods=['POST'])
 def register_user():
     data = request.get_json()
@@ -65,7 +70,6 @@ def login_store():
     if store and bcrypt.check_password_hash(store.password, data['password']):
         return jsonify({'message': 'Store logged in successfully'})
     return jsonify({'message': 'Invalid credentials'}), 401
-
 @app.route('/transaction', methods=['POST'])
 def record_transaction():
     data = request.get_json()
@@ -85,12 +89,11 @@ def get_user_credits(user_id):
     total_credits = sum([transaction.remaining_change for transaction in transactions])
     return jsonify({'total_credits': total_credits})
 
-@app.route('/credits/store/<int:store_id>', methods['GET'])
+@app.route('/credits/store/<int:store_id>', methods=['GET'])
 def get_store_credits(store_id):
     transactions = Transaction.query.filter_by(store_id=store_id).all()
     total_credits = sum([transaction.remaining_change for transaction in transactions])
     return jsonify({'total_credits': total_credits})
-
 @app.route('/notify/user/<int:user_id>', methods=['GET'])
 def notify_user(user_id):
     user = User.query.get(user_id)
@@ -111,17 +114,15 @@ def redeem_credits():
     
     if total_credits >= amount_to_redeem:
         for transaction in transactions:
-            if transaction.remaining_change >= amount_to_reem:
-                transaction.remaining_change -= amount_to_reem
+            if transaction.remaining_change >= amount_to_redeem:
+                transaction.remaining_change -= amount_to_redeem
                 db.session.commit()
                 return jsonify({'message': 'Credits redeemed successfully'})
             else:
-                amount_to_reem -= transaction.remaining_change
+                amount_to_redeem -= transaction.remaining_change
                 transaction.remaining_change = 0
                 db.session.commit()
         return jsonify({'message': 'Credits redeemed successfully'})
     else:
         return jsonify({'message': 'Insufficient credits'}), 400
-
-if __name__ == '__main__':
-    app.run(debug=True)
+flask run
